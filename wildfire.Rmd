@@ -1,6 +1,6 @@
 # source function 
 ```{r}
-source("~/Bren/ESM262/Assignments/project/wildfire.R")
+source("~/Bren/Wildfire/WildfireProject/R/wildfire.R")
 library(tidyverse)
 library(readxl)
 library(purrr)
@@ -9,7 +9,7 @@ library(ggplot2)
 
 # Read Data
 ```{r}
-index<- read_xls("~/Bren/ESM262/Assignments/project/wildfire_data.xls")
+index<- read_xls("~/Bren/Wildfire/WildfireProject/wildfire_data.xls")
 index
 ```
 # Demonstration of use for wildfire function with For loop
@@ -78,7 +78,7 @@ risk_pmap <- do.call(rbind, risk_results_pmap)
 
 # Print or use the dataframe containing risk scores and levels
 print(risk_pmap)
-print(risk_results_pmap)
+
 ```
 ```{r}
 
@@ -108,10 +108,6 @@ ggplot(plot_data, aes(x = Year, y = Risk_Score, color = Risk_Level)) +
        y = "Risk Score",
        color = "Risk Level") +
   theme_minimal()
-
-# Add caption
-caption <- "Graph showing the relationship between year and risk score, with colors representing different risk levels.\nGreen: No Risk, Yellow: Low Risk, Orange: Medium Risk, Red: High Risk."
-
 
 ```
 
