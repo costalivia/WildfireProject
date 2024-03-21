@@ -1,0 +1,117 @@
+# source function 
+```{r}
+source("~/Bren/ESM262/Assignments/project/wildfire.R")
+library(tidyverse)
+library(readxl)
+library(purrr)
+library(ggplot2)
+```
+
+# Read Data
+```{r}
+index<- read_xls("~/Bren/ESM262/Assignments/project/wildfire_data.xls")
+index
+```
+# Demonstration of use for wildfire function with For loop
+```{r}
+
+# Initialize an empty vector to store risk scores
+risk_scores_loop <- numeric(nrow(index))
+risk_levels_loop <- character(nrow(index))
+
+# Iterate over each combination of temperature, precipitation, and humidity
+for (i in seq_len(nrow(index))){
+  # extract T,p, and humidity values for the current row
+  T <- index$Mean_Temperature[i]
+  p <- index$Mean_Precipitation[i]
+  h <- index$Mean_Humidity[i]
+  
+  # calculate risk score using risk_score function
+  risk_scores_loop[i] <- risk_score(T, p, h)
+  
+  # assign risk level based on risk scores
+    if (risk_scores_loop[i] < 291.9) {
+      risk_levels_loop[i] <- "no risk"
+    } else if (risk_scores_loop[i] < 327.8) {
+      risk_levels_loop[i] <- "Low Risk"
+    } else if (risk_scores_loop[i] >= 327.8 && risk_scores_loop[i] <= 514.5) {
+      risk_levels_loop[i] <- "Medium Risk"
+    } else {
+      risk_levels_loop[i] <- "High Risk"
+    }
+}
+
+# Print or use the risk scores as needed
+print(risk_scores_loop)
+summary(risk_scores_loop)
+print(risk_levels_loop)
+# make it into a table
+```
+# Demonstration of use for wildfire function with pmap
+```{r}
+# Using pmap() to iterate over rows of the dataset and calculate risk scores
+index_pmap <- index[, c("Mean_Temperature", "Mean_Precipitation", "Mean_Humidity")]
+risk_results_pmap <- pmap(index_pmap, ~{
+  T <- ..1
+  p <- ..2
+  h <- ..3
+  
+  # Calculate risk score using the risk_score function
+  risk_score_pmap <- risk_score(T, p, h)
+  
+  # Assign risk levels based on the calculated risk score
+  if (risk_score_pmap < 291.9) {
+    level <- "No Risk"
+  } else if (risk_score_pmap < 327.8) {
+    level <- "Low Risk"
+  } else if (risk_score_pmap <= 514.5) {
+    level <- "Medium Risk"
+  } else {
+    level <- "High Risk"
+  }
+  
+  return(list(risk_score_pmap = risk_score_pmap, level = level))
+})
+
+# Convert the list of results into a dataframe
+risk_pmap <- do.call(rbind, risk_results_pmap)
+
+# Print or use the dataframe containing risk scores and levels
+print(risk_pmap)
+print(risk_results_pmap)
+```
+```{r}
+
+# Convert the list of results into a dataframe
+
+plot_data <- data.frame(
+  Year = index$Year,
+  Risk_Score = sapply(risk_results_pmap, function(x) x$risk_score_pmap),
+  Risk_Level = sapply(risk_results_pmap, function(x) x$level)
+)
+print(plot_data)
+
+
+
+# Convert Risk_Level to a factor for proper ordering and coloring
+plot_data$Risk_Level <- factor(plot_data$Risk_Level, levels = c("No Risk", "Low Risk", "Medium Risk", "High Risk"))
+
+# Define colors for each risk level
+risk_colors <- c("No Risk" = "green", "Low Risk" = "yellow", "Medium Risk" = "orange", "High Risk" = "red")
+
+# Plot the graph
+ggplot(plot_data, aes(x = Year, y = Risk_Score, color = Risk_Level)) +
+  geom_point(size = 3) +
+  scale_color_manual(values = risk_colors) +
+  labs(title = "Relationship between Year and Risk Score",
+       x = "Year",
+       y = "Risk Score",
+       color = "Risk Level") +
+  theme_minimal()
+
+# Add caption
+caption <- "Graph showing the relationship between year and risk score, with colors representing different risk levels.\nGreen: No Risk, Yellow: Low Risk, Orange: Medium Risk, Red: High Risk."
+
+
+```
+
