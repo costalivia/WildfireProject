@@ -1,12 +1,39 @@
-#' @title Wild fire risk assessment in Santa Barbara
+#' @name Wildfire
+#' @title Wild Fire Risk Assessment in Santa Barbara
 #' @description
-#' This function provides wild fire risk level as a function of temperature, precipitation, humidity,
-#' @author Livia Costa and Zoe Zhou
-#' @param  T annual mean temperature  (Celsius)
-#' @param p annual mean precipitation  (mm)
-#' @param h annual mean humidity in (%)
-#' @returns risk_score
-#' @returns risk_level: low, medium, high
+#'
+#'  This package includes functions to calculate the risk score for wild fires in
+#'  Santa Barbara using environmental parameters such as temperature, precipitation,
+#'  and humidity, and to classify this score into risk levels.
+#'
+#' The main functions are:
+#' \itemize{
+#'   \item{\code{risk_score}}{: Calculates a numerical risk score based on input parameters}
+#'   \item{\code{risk_level}}{: Classifies the calculated risk score into a risk level category}
+#' }
+#'
+#' @usage
+#' risk_score(T, p, h) risk_level(risk_score)
+#'
+#' @param T Numeric, annual mean temperature in Celsius.
+#' @param p Numeric, annual mean precipitation in mm.
+#' @param h Numeric, annual mean humidity in percent (%).
+#' @return The \code{risk_score} function returns a numeric risk score based on the input parameters.
+#'
+#' The \code{risk_level} function returns a character string indicating the risk level:
+#' "no risk", "low risk", "medium risk", or "high risk"
+#'
+
+#' @author Author:
+#' Livia Costa and Zoe Zhou
+
+#' @examples
+#' Example:
+#' risk_score(25, 200, 45)
+#' risk_level(320)
+#'
+#' @export
+
 
   risk_score = function(T, p, h) {
     risk_score = 0.5*T**2 + 0.2*(400-p)+0.3*(100-h)
@@ -30,4 +57,5 @@
       return("high risk")
     }
   }
+
 

@@ -1,3 +1,9 @@
+# install packages
+```{r}
+install.packages("devtools")
+install.packages("roxygen2")
+```
+
 # source function 
 ```{r}
 source("~/Bren/Wildfire/WildfireProject/R/wildfire.R")

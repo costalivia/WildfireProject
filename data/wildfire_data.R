@@ -30,7 +30,5 @@
 #' @author Livia Costa and Zoe Zhou
 #' @export
 
-library(roxygen2)
-roxygen2::roxygenize()
-devtools::document()
+
 
