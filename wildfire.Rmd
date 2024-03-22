@@ -11,7 +11,7 @@ library(roxygen2)
 
 # Read Data
 ```{r}
-index<- read_xls("~/Bren/Wildfire/WildfireProject/wildfire_data.xls")
+index<- read_xls("~/Bren/Wildfire/WildfireProject/data/wildfire_data.xls")
 index
 ```
 # Demonstration of use for wildfire function with For loop
