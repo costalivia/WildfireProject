@@ -12,6 +12,5 @@
 #' }
 #' @source Estimates based on real data available at different internet sources.
 "wildfire_data"
-NULL
-#' @export
+
 
