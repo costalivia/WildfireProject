@@ -32,8 +32,8 @@ The main functions are:
 }
 }
 \examples{
+Example:
 risk_score(25, 200, 45)
-
 risk_level(320)
 
 }
